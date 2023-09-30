@@ -185,7 +185,8 @@
         * digression
             * London Upgrade through EIP-3529: remove gas refunds for `SELFDESTRUCT`, and reduce gas refunds for `SSTORE` to a lower level
             * practically speaking gas refunds for selfdestruct was not encouraging the freeing up of network space
-                * it was encouraging the speculation on gas prices (in an extremely inefficient manner) via GAS tokens
+                * was encouraging the speculation on gas prices (in an extremely inefficient manner) via GAS tokens
+                * was filling the blockchain with space-consuming gastokens and transactions just to get some cheap gas back
                 * example
                     1. during a period of lower gas prices you deploy contractA (called usually GasToken)
                     1. during gas prices spike you'd self-destruct contractA and receive gas refund
