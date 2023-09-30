@@ -241,7 +241,10 @@
             * increase will be set by the delivery company and will affect all customers equally
     * comparable to Bitcoin’s difficulty adjustment
     * oracles might run into issues under EIP-1559 during periods of high congestion
+        * oracles are used when you require off-chain data
+            * example: Oraclize or ChainLink
         * they need to provide the pricing information for nearly all of DeFi
+            * example: in lending protocols, it influences interest rates and collateral ratios
         * might end up paying incredibly high fees in order to ensure the pricing information reaches the DeFi application in a timely manner
     * context: original Ethereum gas fee system
         * simple auction system: unpredictable and inefficient
