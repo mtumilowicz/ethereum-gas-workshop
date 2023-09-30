@@ -1,13 +1,25 @@
 # ethereum-gas-fee-workshop
 
 * references
-  * https://ethereum.stackexchange.com/questions/594/how-do-gas-refunds-work
-  * https://ethereum.stackexchange.com/questions/92965/how-are-gas-refunds-payed
-  * https://ethereum.stackexchange.com/questions/125028/is-there-still-gas-refund-for-sstore-to-0-instructions
-  * https://ethereum.stackexchange.com/questions/3/what-is-meant-by-the-term-gas
-  * https://ethereum.stackexchange.com/questions/872/what-is-the-cost-to-store-1kb-10kb-100kb-worth-of-data-into-the-ethereum-block
-  * https://medium.com/@eiki1212/what-is-ethereum-gas-simple-explanation-2f0ae62ed69c
-  * https://ethereum.stackexchange.com/questions/133284/how-to-see-the-refund-of-selfdestruct
+    * https://ethereum.stackexchange.com/questions/594/how-do-gas-refunds-work
+    * https://ethereum.stackexchange.com/questions/92965/how-are-gas-refunds-payed
+    * https://ethereum.stackexchange.com/questions/125028/is-there-still-gas-refund-for-sstore-to-0-instructions
+    * https://ethereum.stackexchange.com/questions/3/what-is-meant-by-the-term-gas
+    * https://ethereum.stackexchange.com/questions/872/what-is-the-cost-to-store-1kb-10kb-100kb-worth-of-data-into-the-ethereum-block
+    * https://medium.com/@eiki1212/what-is-ethereum-gas-simple-explanation-2f0ae62ed69c
+    * https://ethereum.stackexchange.com/questions/133284/how-to-see-the-refund-of-selfdestruct
+    * https://ethereum.stackexchange.com/questions/15114/if-all-nodes-execute-smart-contracts-why-do-only-block-creators-get-the-gas-fee
+    * https://www.blocknative.com/blog/ethereum-transaction-gas-limit
+    * https://medium.com/coinmonks/a-short-guide-to-ethereum-gas-fees-5c4c53a05feb
+    * https://help.coinbase.com/en/coinbase/getting-started/crypto-education/eip-1559
+    * https://medium.com/monolith/understanding-defi-ethereums-eip-1559-update-explained-a424416cbf69
+    * https://medium.com/@eric.conner/fixing-the-ethereum-fee-market-eip-1559-9109f1c1814b
+    * https://medium.com/@TrustlessState/eip-1559-the-final-puzzle-piece-to-ethereums-monetary-policy-58802ab28a27
+    * https://consensys.net/blog/quorum/what-is-eip-1559-how-will-it-change-ethereum/
+    * https://medium.com/coinmonks/learn-evm-in-depth-1-the-evm-bytecode-and-environment-b751c431f020
+    * https://ethereum.org/en/developers/docs/evm/
+    * https://blog.qtum.org/the-ethereum-virtual-machine-def21fdc8953
+    * https://medium.com/@danielyamagata/understand-evm-opcodes-write-better-smart-contracts-e64f017b619
 
 ## EVM = Ethereum Virtual Machine
 * refresh: virtual machine
