@@ -21,6 +21,15 @@
     * https://blog.qtum.org/the-ethereum-virtual-machine-def21fdc8953
     * https://medium.com/@danielyamagata/understand-evm-opcodes-write-better-smart-contracts-e64f017b619
 
+## preface
+* goals of this workshop
+    * understanding
+* workshop task
+    * improve `Inefficient.sol`
+        1. replace `compareStrings` with `keccak256`
+        1. use correct qualifiers: view, calldata, etc
+        1. use correct data structure: mapping
+
 ## EVM = Ethereum Virtual Machine
 * refresh: virtual machine
     * is a type of simulation of a CPU
