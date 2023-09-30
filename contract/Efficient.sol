@@ -41,6 +41,10 @@ contract EfficientContract {
         length = _length;
     }
 
+    function count(string memory _searchString) public view returns (uint) {
+       return data[_searchString];
+    }
+
     function exists(string memory _searchString) public view returns (bool) {
         return data[_searchString] > 0;
     }

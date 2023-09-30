@@ -13,6 +13,24 @@ contract InefficientContract {
         }
     }
 
+    function count(string memory _searchString) public view returns (uint) {
+        uint count = 0;
+        for (uint256 i = 0; i < data.length; i++) {
+            if (compareStrings(data[i], _searchString)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function exists(string memory _searchString) public view returns (bool) {
+        return count(_searchString) > 0;
+    }
+
+    function getLength() public view returns (uint) {
+        return data.length;
+    }
+
     function compareStrings(string memory a, string memory b) private view returns (bool) {
         bytes memory aBytes = bytes(a);
         bytes memory bBytes = bytes(b);
@@ -27,18 +45,5 @@ contract InefficientContract {
             }
             return true;
         }
-    }
-
-    function exists(string memory _searchString) public view returns (bool) {
-        for (uint256 i = 0; i < data.length; i++) {
-            if (compareStrings(data[i], _searchString)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function getLength() public view returns (uint) {
-        return data.length;
     }
 }
