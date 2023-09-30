@@ -7,6 +7,7 @@
   * https://ethereum.stackexchange.com/questions/3/what-is-meant-by-the-term-gas
   * https://ethereum.stackexchange.com/questions/872/what-is-the-cost-to-store-1kb-10kb-100kb-worth-of-data-into-the-ethereum-block
   * https://medium.com/@eiki1212/what-is-ethereum-gas-simple-explanation-2f0ae62ed69c
+  * https://ethereum.stackexchange.com/questions/133284/how-to-see-the-refund-of-selfdestruct
 
 ## EVM = Ethereum Virtual Machine
 * refresh: virtual machine
@@ -183,6 +184,12 @@
     * example: if a smart contract deletes a storage slot, it gets a gas refund
         * digression
             * London Upgrade through EIP-3529: remove gas refunds for `SELFDESTRUCT`, and reduce gas refunds for `SSTORE` to a lower level
+            * practically speaking gas refunds for selfdestruct was not encouraging the freeing up of network space
+                * it was encouraging the speculation on gas prices (in an extremely inefficient manner) via GAS tokens
+                * example
+                    1. during a period of lower gas prices you deploy contractA (called usually GasToken)
+                    1. during gas prices spike you'd self-destruct contractA and receive gas refund
+                    1. you can use that gas refund for paying for transaction during spike
     * refund is only applied at the end of the transaction
         * the full gas must be made available in order to execute the full transaction
 * it's important to estimate the gas needed for a transaction or smart contract execution
