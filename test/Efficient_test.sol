@@ -145,7 +145,19 @@ contract EfficientContractTest {
 
         // then
         lengthCheck(0);
-        countCheck("a", 0);
+        countCheck("", 0);
+    }
+
+    function dataWithEmptyStringsTest() public {
+        // given
+        string[] memory data4 = new string[](5);
+
+        // when
+        contractInstance.addAll(data4);
+
+        // then
+        lengthCheck(5);
+        countCheck("", 5);
     }
 
     function lengthCheck(uint expectedValue) private {

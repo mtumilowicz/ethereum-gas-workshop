@@ -16,9 +16,9 @@ contract EfficientContract {
         string[] memory uniqueDatas = new string[](newDataLength);
         uint[] memory counts = new uint[](newDataLength);
 
-        for (uint i = 0; i < newDataLength; i++) {
+        for (uint i; i < newDataLength; i++) {
             bool found = false;
-            for (uint j = 0; j < uniqueDatas.length; j++) {
+            for (uint j; j < newDataLength; j++) {
                 if (compareStrings(_newDatas[i], uniqueDatas[j])) {
                     counts[j]++;
                     found = true;
@@ -31,7 +31,7 @@ contract EfficientContract {
             }
         }
 
-        for (uint i = 0; i < uniqueDatas.length; i++) {
+        for (uint i; i < newDataLength; i++) {
             if (counts[i] > 0) {
                 _length += counts[i];
                 data[uniqueDatas[i]] += counts[i];
