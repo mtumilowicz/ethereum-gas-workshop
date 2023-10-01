@@ -49,10 +49,6 @@ contract EfficientContract {
         return data[_searchString] > 0;
     }
 
-    function getLength() public view returns (uint256) {
-        return length;
-    }
-
     function compareStrings(string memory a, string memory b) private pure returns (bool) {
         bytes32 hashA = keccak256(bytes(a));
         bytes32 hashB = keccak256(bytes(b));

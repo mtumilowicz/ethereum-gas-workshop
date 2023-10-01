@@ -1,7 +1,7 @@
 pragma solidity ^0.8.0;
 
 contract InefficientContract {
-    string[] public data;
+    string[] private data;
 
     function addData(string memory _newData) public {
         data.push(_newData);
