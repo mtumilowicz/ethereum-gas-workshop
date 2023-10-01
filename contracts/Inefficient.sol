@@ -8,14 +8,14 @@ contract InefficientContract {
     }
 
     function addAll(string[] memory _newDatas) public {
-        for (uint256 i = 0; i < _newDatas.length; i++) {
+        for (uint i = 0; i < _newDatas.length; i++) {
             data.push(_newDatas[i]);
         }
     }
 
     function count(string memory _searchString) public view returns (uint) {
         uint count = 0;
-        for (uint256 i = 0; i < data.length; i++) {
+        for (uint i = 0; i < data.length; i++) {
             if (compareStrings(data[i], _searchString)) {
                 count++;
             }
