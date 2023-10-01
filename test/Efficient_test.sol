@@ -11,7 +11,7 @@ contract EfficientContractTest {
         contractInstance = new EfficientContract();
     }
 
-    function t1 () public {
+    function differentValuesTest() public {
         // given
         string[] memory data1 = new string[](3);
         data1[0] = "a";
@@ -28,7 +28,7 @@ contract EfficientContractTest {
         countCheck("c", 1);
     }
 
-    function t11 () public {
+    function sameValuesTest() public {
         // given
         string[] memory data1 = new string[](3);
         data1[0] = "a";
@@ -43,7 +43,7 @@ contract EfficientContractTest {
         countCheck("a", 3);
     }
 
-    function t2() public {
+    function pairwiseSameValuesTest() public {
         // given
         string[] memory data2 = new string[](4);
         data2[0] = "a";
@@ -60,7 +60,24 @@ contract EfficientContractTest {
         countCheck("b", 2);
     }
 
-    function t3() public {
+    function pairwiseSameValuesInterleavedTest() public {
+        // given
+        string[] memory data2 = new string[](4);
+        data2[0] = "a";
+        data2[1] = "b";
+        data2[2] = "a";
+        data2[3] = "b";
+
+        // when
+        contractInstance.addAll(data2);
+
+        // then
+        lengthCheck(4);
+        countCheck("a", 2);
+        countCheck("b", 2);
+    }
+
+    function pairwiseSameValuesAndOneDistinctInterleavedTest() public {
         // given
         string[] memory data3 = new string[](5);
         data3[0] = "a";
@@ -79,7 +96,7 @@ contract EfficientContractTest {
         countCheck("c", 1);
     }
 
-    function t33() public {
+    function threeDistinctAndOnePairTest() public {
         // given
         string[] memory data3 = new string[](5);
         data3[0] = "a";
@@ -99,7 +116,7 @@ contract EfficientContractTest {
         countCheck("d", 2);
     }
 
-    function t333() public {
+    function threeDistinctAndOnePairInterleavedTest() public {
         // given
         string[] memory data3 = new string[](5);
         data3[0] = "d";
@@ -119,7 +136,7 @@ contract EfficientContractTest {
         countCheck("d", 2);
     }
 
-    function t4() public {
+    function emptyDataTest() public {
         // given
         string[] memory data4 = new string[](0);
 
