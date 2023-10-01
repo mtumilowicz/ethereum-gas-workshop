@@ -20,6 +20,13 @@
     * https://ethereum.org/en/developers/docs/evm/
     * https://blog.qtum.org/the-ethereum-virtual-machine-def21fdc8953
     * https://medium.com/@danielyamagata/understand-evm-opcodes-write-better-smart-contracts-e64f017b619
+    * https://www.cryptopolitan.com/solidity-gas-optimization-strategies/
+    * https://www.alchemy.com/overviews/solidity-gas-optimization
+    * https://certik.medium.com/gas-optimization-in-ethereum-smart-contracts-10-best-practices-cbd57548bdf0
+    * https://yamenmerhi.medium.com/gas-optimization-in-solidity-75945e12322f
+    * https://betterprogramming.pub/solidity-gas-optimizations-and-tricks-2bcee0f9f1f2
+    * https://www.rareskills.io/post/gas-optimization
+    * https://coinsbench.com/comprehensive-guide-tips-and-tricks-for-gas-optimization-in-solidity-5380db734404
 
 ## preface
 * goals of this workshop
@@ -90,8 +97,8 @@
     * example
         ```
         // Solidity code
-        function addIntsInMemory(uint256 a, uint256 b) public pure returns (uint256) {
-            uint256 result = a + b;
+        function addIntsInMemory(uint a, uint b) public pure returns (uint) {
+            uint result = a + b;
             return result;
         }
         ```
@@ -291,3 +298,163 @@
         * as Ethereum has gained new users, the network has become more congested
             * gas fees have become more volatile
             * many users have inadvertently overpaid for their transactions
+
+## solidity
+* gas optimisation techniques
+    1. Use view and pure Functions: If a function does not modify state variables, declare it with the view or pure keyword. This allows them to be executed locally without any gas cost.
+    1. Avoid Loops Whenever Possible: Loops can consume a lot of gas, especially when the number of iterations is high or unpredictable. Consider using mapping or other data structures to avoid loops.
+    1. Minimize Storage Reads and Writes: Storage operations are more expensive than memory or stack operations. Minimize the number of read and write operations to storage variables.
+    1. Use Structs to Group Related Data: Grouping related data into structs can reduce storage costs compared to using separate variables.
+    1. Avoid Large Arrays: Operations on large arrays can be expensive. Consider using mappings or other data structures to achieve the same functionality.
+    1. Limit Function Visibility: Make functions as private as possible to prevent unintended external access.
+    1. Use Enums Instead of Strings: Enums are more gas-efficient compared to strings, as they represent a fixed set of values.
+    1. Use Events for Logging: Events are a more efficient way to log information compared to writing to storage.
+    1. Leverage Libraries: Use libraries for reusable code. This can save gas by reducing the size of your contracts.
+    1. Avoid Complex Operations in Constructors: Constructors run only once during deployment. Avoid performing complex operations in them.
+    1. Consider Lazy Evaluation: Delaying computations until absolutely necessary can save gas.
+    1. Upgradeable Contracts: Implement a proxy pattern to separate the logic from the storage, allowing for upgrades without deploying a new contract.
+    1. Gas Estimation: Be aware of the gas costs associated with different operations and functions. Tools like Remix IDE provide gas estimations for transactions.
+    1. Avoid Ether Sends in Loops: Sending ether in a loop can lead to unpredictable gas costs. It's better to send ether outside of loops.
+    1. Use Assembly for Gas Optimization: In some cases, low-level assembly can be used to optimize gas costs further.
+
+* Pack your variables
+    * gas cost for storage usage is calculated based on the number of storage slots used
+    * Each storage slot has a size of 256 bits, and the Solidity compiler and optimizer automatically handle the packing of variables into these slots
+    * you can pack multiple variables within a single storage slot, optimizing storage usage and reducing gas costs
+    * minimize the number of storage slots used
+* Reduce outside calls
+    * it is recommended to consolidate data retrieval by calling a function that returns all the required data instead of making separate calls for each data element
+    * Gas efficiency is improved by reducing the number of external contract calls and retrieving multiple data points in a single function call, resulting in cost-effective and efficient smart contracts.
+* uint8 is not always cheaper than uint256
+    * When working with smaller variable types like uint8, the EVM must first convert them to the more significant uint256 type to perform operations on them
+    * The key lies in the concept of packing
+        * In Solidity, you can pack multiple small variables into a single storage slot, optimizing storage usage and reducing gas costs
+    * A smart contract's gas consumption can be higher if developers use items that are less than 32 bytes in size because the Ethereum Virtual Machine can only handle 32 bytes at a time.
+    * Save on Data Types
+        * For instance, in Solidity, integers can be broken down into different sizes: unit8, unit16, unit32, and so on. Since the EVM performs operations in 256-bit chunks, using uint8 means the EVM has to first convert it to uint256. This conversion costs extra gas.
+* Use external function modifiers
+    * In Solidity, when you define a public function that can be called from outside the contract, the input parameters of that function are automatically copied into memory and incur gas costs.
+    * However, if the process is meant to be called externally, it is significant to mark it as “external” in the code. By doing so, the function parameters are not copied into memory but are read directly from the call data.
+* Use the short circuit rule to your advantage
+    * When using disjunction, the gas usage is reduced because if the first function evaluates to true, the second function is not executed.
+    * On the other hand, in conjunction, if the first function evaluates to false, the second function is skipped entirely, further optimizing gas usage.
+* Enable the Solidity Compiler Optimizer
+    * an action like inlining functions can result in significantly larger code, it is frequently used because it creates the potential for additional simplifications.
+    * There are several optimization tools available, such as solc optimizer, Truffle’s build optimizer, and Remix’s Solidity compiler.
+* Minimize On-Chain Data
+    * As defined in the Ethereum yellow paper, storage operations are over 100x more costly than memory operations. OPcodes mload and mstore only cost 3 gas units while storage operations like sload and sstore cost at least 100 units, even in the most optimistic situation.
+        * Reduce Storage modifications by saving intermediate results in Memory and assign results to Storage variables only after all calculations are completed
+    * saving less data in storage variables, batching operations, and avoiding looping
+    * Keep all data off-chain and only save the smart contract’s critical info on-chain
+    * Using events to store data is a popular, but ill-advised method for gas optimization because, while it is less expensive to store data in events relative to variables, the data in events cannot be accessed by other smart contracts on-chain.
+        * as smart contracts cannot hear events on their own because contract data lives in the States trie, and event data is stored in the Transaction Receipts trie
+    * example: If You know what data to hash, there is no need to consume more computational power to hash it using keccak256
+        ```
+        bytes32 hash = keccak256(abi.encodePacked('HashingExample')
+        ```
+        vs
+        ```
+        bytes32 hash = 'BHsbwJbdw'
+        ```
+        * Changing to immutable will only perform hashing on contract deployment which will save gas
+            * The use of constant keccak variables results in extra hashing (and so gas).
+            * This results in the keccak operation being performed whenever the variable is used, increasing gas costs relative to just storing the output hash.
+    * Data that does not need to be accessed on-chain can be stored in events to save gas.
+    * When you design a Dapp you don’t have to put 100% of your data on the blockchain, usually, you have part of the system (Unnecessary data (metadata, etc .. ) ) on a centralized server.
+* Batching Operations
+* Looping
+    * Avoid looping through lengthy arrays; not only will it consume a lot of gas, but if gas prices rise too much, it can even prevent your contract from being carried out beyond the block gas limit.
+    * ‍Instead of looping over an array until you locate the key you need, use mappings, which are hash tables that enable you to retrieve any value using its key in a single action.
+* Free Up Unused Storage
+    * Deleting your unused variables helps free up space and earns a gas refund.
+    * Deleting unused variables has the same effect as reassigning the value type with its default value, such as the integer's default value of 0, or the address zero for addresses.
+    * Mappings, however, are unaffected by deletion, as the keys of mappings may be arbitrary and are generally unknown.
+* Use Calldata Instead of Memory
+    * Instead of copying variables to memory, it is typically more cost-effective to load them immediately from calldata.
+* Use immutable and constant
+    * Immutable and constant are keywords that can be used on state variables to limit changes to their state.
+    * Constant/Immutable variables are not stored in contract storage
+        * These variables are evaluated at compile-time and are stored in the bytecode of the contract.
+* Mapping vs Array
+    * Mappings are more efficient and less expensive in most cases, while Arrays are iterable and packable.
+    * Therefore, it is advised to utilize mappings for managing lists of data, except when iteration is required or it is possible to pack data types.
+* Modifier Optimization
+    * It is recommended to move the modifiers require statements into an internal virtual function
+    * Putting the require in an internal function decreases contract size when a modifier is used multiple times.
+    ```
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
+    }
+    ```
+    into
+    ```
+    modifier onlyOwner() {
+        _onlyOwner();
+        _;
+    }
+
+    function _onlyOwner() private {
+        require(msg.sender == owner, "Only owner can call this function");
+    }
+    ```
+* Use In-Line Assembly Code
+    * In-line assembly allows developers to write low-level, efficient code that can be executed directly by the EVM without the need for expensive Solidity opcodes
+    * In-line assembly also allows for more precise control over memory and storage usage, which can further reduce gas costs
+* Use Layer 2 Solutions
+    * Layer 2 solutions like rollups, sidechains, and state channels enable offloading of transaction processing from the main Ethereum chain, resulting in faster and cheaper transactions.
+* Use Libraries
+    * If you have several contracts that use the same functionalities, you can extract these common functions into a single library, and then you’re gonna deploy this library just once and all your contracts will point to this library to execute the shared functionalities.
+* Avoid manipulating storage data
+    * In the Second contract, before running the for loop we’re assigning the value of a storage data d to _d to avoid accessing the storage each time we iterate.
+        ```
+        uint _d = d;
+        for (uint i = 0; i < _d; i++) {  }
+        ```
+    * Caching the length in for loops
+        * Reading array length at each iteration of the loop takes 6 gas (three for mload and three to place memory_offset ) in the stack.
+        * Caching the array length in the stack saves around 3 gas per iteration
+        * If it is a storage array, this is an extra sload operation (100 additional extra gas (EIP-2929) for each iteration except for the first)
+        * If it is a memory array, this is an extra mload operation (3 additional gas for each iteration except for the first),
+        * If it is a calldata array, this is an extra calldataload operation (3 additional gas for each iteration except for the first) These extra costs can be avoided by caching the array length (in the stack):
+        * uint length = arr.length;
+            * In the above example, the sload or mload or calldataload operation is only called once and subsequently replaced by a cheap dupN instruction
+* Use ERC1167 To Deploy the same Contract many time
+    * EIP1167 minimal proxy contract is a standardized, gas-efficient way to deploy a bunch of contract clones from a factory
+    * .EIP1167 not only minimizes length, but it is also literally a “minimal” proxy that does nothing but proxying
+    * Unlike other upgradable proxy contracts that rely on the honesty of their administrator (who can change the implementation), the address in EIP1167 is hardcoded in bytecode and remain unchangeable.
+* Avoid assigning values that You’ll never use
+    * Every variable assignment in Solidity costs gas. When initializing variables, we often waste gas by assigning default values that will never be used.
+      uint256 value; is cheaper than uint256 value = 0;.
+* Use storage pointers instead of memory where appropriate
+    ```
+    mapping(uint256 => User) public users;
+    User memory _user = users[_id];
+    ```
+    vs
+    ```
+    mapping(uint256 => User) public users;
+    User storage _user = users[_id];
+    ```
+* Memory is very cheap to allocate as long as it is small but past a certain point i.e., 32 kilobytes of memory storage in a single transaction, the memory cost enters into a quadratic section and the formula for this calculation is given in Ethereum Yellow Paper as follows
+    ```
+    contract smallArraySize {
+        // Function Execution Cost = 21,903
+        function checkArray() external {
+            uint256[100] memory myArr;
+        }
+    }
+
+    contract LargeArraySize {
+        // Function Execution Cost = 276,750
+        function checkArray() external {
+            uint256[10000] memory myArr;
+        }
+    }
+
+    contract VeryLargeArraySize {
+        // Function Execution Cost = 20,154,094
+        function checkArray() external {
+            uint256[100000] memory myArr;
+        }
+    ```
