@@ -1,4 +1,4 @@
-# ethereum-gas-fee-workshop
+# ethereum-gas-workshop
 
 * references
     * https://www.oreilly.com/library/view/hands-on-smart-contract/9781492045250/
